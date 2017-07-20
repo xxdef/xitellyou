@@ -11,6 +11,8 @@ namespace xitellyou
 {
 	/// <summary>
 	/// msdn.itellyou.cn 数据抓取
+	/// author : liaowuping.
+	/// date   : 2017.07.20.
 	/// </summary>
 	class itellyou
 	{
@@ -70,13 +72,14 @@ namespace xitellyou
 							string sha1 = detail["SHA1"] as string;
 							string size = detail["size"] as string;
 
-							// 直接保存到当前目录
+							// 直接保存到当前运行的目录
 							string dir = cateName + "/" + seriesName + "/" + langName;
 							string path = dir + "/" + filename + ".txt";
 
 							if (Directory.Exists(dir) == false)
 								Directory.CreateDirectory(dir);
 
+							// 输出到文件
 							FileStream f = File.Open(path, FileMode.Create);
 							StreamWriter w = new StreamWriter(f);
 							w.WriteLine("文件名    = " + filename);
@@ -87,6 +90,7 @@ namespace xitellyou
 							w.Close();
 							f.Close();
 
+							// 输出到控制台
 							Console.WriteLine("文件名    = " + filename);
 							Console.WriteLine("SHA1      = " + sha1);
 							Console.WriteLine("文件大小  = " + size);
@@ -100,7 +104,7 @@ namespace xitellyou
 
 		}
 		/// <summary>
-		/// 获取资源类型列表
+		/// 获取产品系列列表
 		/// </summary>
 		/// <param name="cateId">分类id</param>
 		/// <returns>win7、win8、win10...</returns>
@@ -111,7 +115,7 @@ namespace xitellyou
 		}
 
 		/// <summary>
-		/// 获取资源语言列表
+		/// 获取产品系列的语言列表
 		/// </summary>
 		/// <param name="typeId">资源类型id</param>
 		/// <returns>多国语言、英语、中文 - 简体、中文 - 繁体...</returns>
@@ -122,7 +126,7 @@ namespace xitellyou
 		}
 
 		/// <summary>
-		/// 获取资源列表
+		/// 获取产品列表
 		/// </summary>
 		/// <param name="typeId"></param>
 		/// <param name="lang"></param>
@@ -133,6 +137,11 @@ namespace xitellyou
 			return MiniJsonExtensions.hashtableFromJson(text);
 		}
 
+		/// <summary>
+		/// 获取产品详细信息
+		/// </summary>
+		/// <param name="productId"></param>
+		/// <returns></returns>
 		private Hashtable getProductDetail(string productId)
 		{
 			string text = httpPost("http://msdn.itellyou.cn/Category/GetProduct", string.Format("id={0}", productId));
