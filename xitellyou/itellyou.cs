@@ -159,32 +159,40 @@ namespace xitellyou
         /// <returns></returns>
         private string httpPost(string url, string form)
         {
-            try
+            string text = null;
+            do
             {
-                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-                request.Method = "POST";
-                request.CookieContainer = new CookieContainer();
-                request.Referer = "https://msdn.itellyou.cn/";
-                request.UserAgent = XConst.UserAgent;
-                request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
-                Stream formStream = request.GetRequestStream();
-                StreamWriter formStreamWriter = new StreamWriter(formStream);
-                formStreamWriter.Write(form);
-                formStreamWriter.Close();
-                formStream.Close();
+                try
+                {
+                    text = null;
 
-                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                var responseStream = response.GetResponseStream();
-                StreamReader r = new StreamReader(responseStream);
-                string text = r.ReadToEnd();
-                r.Close();
-                responseStream.Close();
-                return text;
-            }
-            catch (Exception except)
-            {
-                return null;
-            }
+                    HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                    request.Method = "POST";
+                    request.CookieContainer = new CookieContainer();
+                    request.Referer = "https://msdn.itellyou.cn/";
+                    request.UserAgent = XConst.UserAgent;
+                    request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                    Stream formStream = request.GetRequestStream();
+                    StreamWriter formStreamWriter = new StreamWriter(formStream);
+                    formStreamWriter.Write(form);
+                    formStreamWriter.Close();
+                    formStream.Close();
+
+                    HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                    var responseStream = response.GetResponseStream();
+                    StreamReader r = new StreamReader(responseStream);
+                    text = r.ReadToEnd();
+                    r.Close();
+                    responseStream.Close();
+                    break;
+                }
+                catch (Exception except)
+                {
+                    continue;
+                }
+
+            } while (true);
+            return text;
         }
 
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
