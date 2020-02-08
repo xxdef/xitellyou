@@ -136,7 +136,7 @@ namespace xitellyou
         /// <returns></returns>
         private Hashtable getProductList(string typeId, string lang)
         {
-            string text = httpPost("https://msdn.itellyou.cn/Category/GetList", string.Format("id={0}&lang={1}&filter=true", typeId, lang));
+            string text = httpPost("https://msdn.itellyou.cn/Category/GetList", string.Format("id={0}&lang={1}&filter=false", typeId, lang));
             return MiniJsonExtensions.hashtableFromJson(text);
         }
 
